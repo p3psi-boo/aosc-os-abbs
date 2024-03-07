@@ -1,4 +1,5 @@
 VER=0.21.0
+REL=1
 SRCS="tbl::https://github.com/iovisor/bpftrace/archive/v${VER}.tar.gz"
 CHKSUMS="sha256::8bbca667633fd7b64077cd59b493b94bfab19af582a824091582299aaca76b04"
 CHKUPDATE="anitya::id=141354"
