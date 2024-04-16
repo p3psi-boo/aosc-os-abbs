@@ -9,3 +9,4 @@ CHKSUMS="sha256::728bf0cf4c795ef3c481c958ab9b2a8e4799679f6ad7e823723b984dd3ce72d
 SUBDIR="tdesktop-$VER-full"
 CHKUPDATE="anitya::id=16951"
 ENVREQ__ARM64="total_mem_per_core=3"
+ENVREQ__LOONGARCH64="total_mem_per_core=4"
