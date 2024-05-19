@@ -1,7 +1,7 @@
-From 739ac91a4a15e067dc3df11e2f3fb2ceae536216 Mon Sep 17 00:00:00 2001
+From 7dd3cbdb47ff63e9ac8df9a8d2649d22d1fb8545 Mon Sep 17 00:00:00 2001
 From: Icenowy Zheng <uwu@icenowy.me>
 Date: Fri, 3 Nov 2023 12:57:09 +0800
-Subject: [PATCH 3/6] llvmpipe: add LoongArch support in ORCJIT
+Subject: [PATCH 04/10] llvmpipe: add LoongArch support in ORCJIT
 
 Currently set CPU features based on softdev convention.
 
@@ -63,7 +63,7 @@ index 758a8bb61c5..dc14f9ee02c 100644
  
     if (::gallivm_debug & (GALLIVM_DEBUG_IR | GALLIVM_DEBUG_ASM | GALLIVM_DEBUG_DUMP_BC)) {
 diff --git a/src/util/detect_arch.h b/src/util/detect_arch.h
-index 36f638a10d5..f408f7aab19 100644
+index 35385a02b49..413575c2b72 100644
 --- a/src/util/detect_arch.h
 +++ b/src/util/detect_arch.h
 @@ -112,6 +112,14 @@
@@ -91,5 +91,5 @@ index 36f638a10d5..f408f7aab19 100644
 +
  #endif /* UTIL_DETECT_ARCH_H_ */
 -- 
-2.44.0
+2.43.4
 

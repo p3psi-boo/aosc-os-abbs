@@ -1,7 +1,7 @@
-From 31dee80a40daab2a0eaf871c201370ade450b802 Mon Sep 17 00:00:00 2001
+From f05f41404c90f7f713dc25a3f39283d6dab2942f Mon Sep 17 00:00:00 2001
 From: Icenowy Zheng <uwu@icenowy.me>
 Date: Tue, 2 Apr 2024 21:36:21 +0800
-Subject: [PATCH 5/6] llvmpipe: add shader cache support for ORCJIT
+Subject: [PATCH 06/10] llvmpipe: add shader cache support for ORCJIT
  implementation
 
 Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
@@ -14,7 +14,7 @@ Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
  5 files changed, 125 insertions(+), 26 deletions(-)
 
 diff --git a/src/gallium/auxiliary/draw/draw_llvm.c b/src/gallium/auxiliary/draw/draw_llvm.c
-index 932edd818be..036567ffeeb 100644
+index 389ca50e1f5..2b2ce8ca853 100644
 --- a/src/gallium/auxiliary/draw/draw_llvm.c
 +++ b/src/gallium/auxiliary/draw/draw_llvm.c
 @@ -1675,8 +1675,16 @@ draw_llvm_generate(struct draw_llvm *llvm, struct draw_llvm_variant *variant)
@@ -35,7 +35,7 @@ index 932edd818be..036567ffeeb 100644
  
     context_ptr               = LLVMGetParam(variant_func, 0);
     resources_ptr             = LLVMGetParam(variant_func, 1);
-@@ -2410,8 +2418,17 @@ draw_gs_llvm_generate(struct draw_llvm *llvm,
+@@ -2411,8 +2419,17 @@ draw_gs_llvm_generate(struct draw_llvm *llvm,
        if (LLVMGetTypeKind(arg_types[i]) == LLVMPointerTypeKind)
           lp_add_function_attr(variant_func, i + 1, LP_FUNC_ATTR_NOALIAS);
  
@@ -54,7 +54,7 @@ index 932edd818be..036567ffeeb 100644
     context_ptr               = LLVMGetParam(variant_func, 0);
     resources_ptr             = LLVMGetParam(variant_func, 1);
     input_array               = LLVMGetParam(variant_func, 2);
-@@ -3017,8 +3034,17 @@ draw_tcs_llvm_generate(struct draw_llvm *llvm,
+@@ -3018,8 +3035,17 @@ draw_tcs_llvm_generate(struct draw_llvm *llvm,
        }
     }
  
@@ -73,7 +73,7 @@ index 932edd818be..036567ffeeb 100644
     resources_ptr               = LLVMGetParam(variant_func, 0);
     input_array               = LLVMGetParam(variant_func, 1);
     output_array              = LLVMGetParam(variant_func, 2);
-@@ -3591,8 +3617,17 @@ draw_tes_llvm_generate(struct draw_llvm *llvm,
+@@ -3592,8 +3618,17 @@ draw_tes_llvm_generate(struct draw_llvm *llvm,
        if (LLVMGetTypeKind(arg_types[i]) == LLVMPointerTypeKind)
           lp_add_function_attr(variant_func, i + 1, LP_FUNC_ATTR_NOALIAS);
  
@@ -243,7 +243,7 @@ index dc14f9ee02c..ad6996c9082 100644
 -#endif
 -}
 diff --git a/src/gallium/drivers/llvmpipe/lp_state_cs.c b/src/gallium/drivers/llvmpipe/lp_state_cs.c
-index 7bbcc61ee16..cc80c40b6ea 100644
+index d4882f36d5a..02b8ae8b86f 100644
 --- a/src/gallium/drivers/llvmpipe/lp_state_cs.c
 +++ b/src/gallium/drivers/llvmpipe/lp_state_cs.c
 @@ -410,8 +410,16 @@ generate_compute(struct llvmpipe_context *lp,
@@ -265,7 +265,7 @@ index 7bbcc61ee16..cc80c40b6ea 100644
     context_ptr  = LLVMGetParam(function, CS_ARG_CONTEXT);
     resources_ptr  = LLVMGetParam(function, CS_ARG_RESOURCES);
 diff --git a/src/gallium/drivers/llvmpipe/lp_state_fs.c b/src/gallium/drivers/llvmpipe/lp_state_fs.c
-index 3bafc988e24..640d1ed336a 100644
+index 94cfd744fea..b9ad2e4273c 100644
 --- a/src/gallium/drivers/llvmpipe/lp_state_fs.c
 +++ b/src/gallium/drivers/llvmpipe/lp_state_fs.c
 @@ -3222,8 +3222,16 @@ generate_fragment(struct llvmpipe_context *lp,
@@ -309,5 +309,5 @@ index 4859d65e1cf..4a011c8f8ee 100644
     LLVMValueRef context_ptr = LLVMGetParam(function, 0);
     LLVMValueRef x = LLVMGetParam(function, 1);
 -- 
-2.44.0
+2.43.4
 
