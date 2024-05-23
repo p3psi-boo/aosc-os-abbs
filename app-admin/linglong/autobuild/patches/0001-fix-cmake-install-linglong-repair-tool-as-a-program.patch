@@ -1,0 +1,31 @@
+From a270a5485b03c4d6f74b7c306a35be37a13ebd8b Mon Sep 17 00:00:00 2001
+From: Mingcong Bai <jeffbai@aosc.xyz>
+Date: Thu, 23 May 2024 14:27:48 +0800
+Subject: [PATCH] fix(cmake): install linglong-repair-tool as a program
+
+Previously, misc/CMakeLists.txt installed the program linglong-repair-tool as
+a "FILES" item (no executable bit), this is incorrect as the user would fail
+to run this program (with a "permission denied" error).
+
+Correct the INSTALL() command and install linglong-repair-tool as a "PROGRAMS"
+item to give it executable bit at install-time.
+---
+ misc/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/misc/CMakeLists.txt b/misc/CMakeLists.txt
+index a4ffc880..638bbeb8 100644
+--- a/misc/CMakeLists.txt
++++ b/misc/CMakeLists.txt
+@@ -140,7 +140,7 @@ install(
+ 
+ # linglong-repair-tool bin
+ install(
+-  FILES ${CMAKE_CURRENT_BINARY_DIR}/script/linglong-repair-tool
++  PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/script/linglong-repair-tool
+   DESTINATION ${CMAKE_INSTALL_BINDIR}
+ )
+ 
+-- 
+2.43.4
+
