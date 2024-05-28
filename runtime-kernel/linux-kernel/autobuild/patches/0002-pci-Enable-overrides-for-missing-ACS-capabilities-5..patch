@@ -1,7 +1,7 @@
-From ee8143391542e62643b59591b0747d174decc93a Mon Sep 17 00:00:00 2001
+From 048bc32a91bfaaa6af212db1c4156e5dc6bc4989 Mon Sep 17 00:00:00 2001
 From: Mark Weiman <mark.weiman@markzz.com>
 Date: Wed, 27 Jan 2021 13:28:09 -0500
-Subject: [PATCH 02/58] pci: Enable overrides for missing ACS capabilities
+Subject: [PATCH 02/91] pci: Enable overrides for missing ACS capabilities
  (5.10.11+)
 
 This an updated version of Alex Williamson's patch from:
@@ -14,10 +14,10 @@ Original commit message follows:
  2 files changed, 110 insertions(+)
 
 diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 396137ee018d..a398f9b54660 100644
+index b600df82669d..6619b42b8e77 100644
 --- a/Documentation/admin-guide/kernel-parameters.txt
 +++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -4420,6 +4420,14 @@
+@@ -4472,6 +4472,14 @@
  		nomsi		[MSI] If the PCI_MSI kernel config parameter is
  				enabled, this kernel boot option can be used to
  				disable the use of MSI interrupts system-wide.
@@ -33,7 +33,7 @@ index 396137ee018d..a398f9b54660 100644
  				Safety option to keep boot IRQs enabled. This
  				should never be necessary.
 diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index eff7f5df08e2..12dd1a87c71a 100644
+index 568410e64ce6..86600feb22f8 100644
 --- a/drivers/pci/quirks.c
 +++ b/drivers/pci/quirks.c
 @@ -287,6 +287,106 @@ static int __init pci_apply_final_quirks(void)
@@ -153,5 +153,5 @@ index eff7f5df08e2..12dd1a87c71a 100644
  };
  
 -- 
-2.45.1
+2.43.4
 

@@ -1,7 +1,7 @@
-From 88849e4a2236cfb40bc9fcb4986d22c416488f60 Mon Sep 17 00:00:00 2001
+From 73842f27db44ad5e2bdcab84f5eb1b9eed1026ee Mon Sep 17 00:00:00 2001
 From: Icenowy Zheng <uwu@icenowy.me>
 Date: Sun, 25 Sep 2022 23:03:51 +0800
-Subject: [PATCH 26/58] net: stmmac: add a glue driver for GMACs in Phytium
+Subject: [PATCH 26/91] net: stmmac: add a glue driver for GMACs in Phytium
  SoCs
 
 Multiple Phytium ARM64 SoCs feature DesignWare GMACs that is mostly
@@ -19,7 +19,7 @@ Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-phytium.c
 
 diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-index 4ec61f1ee71a..d45b2e1fd9f2 100644
+index 05cc07b8f48c..782a17288f80 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
 +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
 @@ -121,6 +121,15 @@ config DWMAC_MESON
@@ -39,7 +39,7 @@ index 4ec61f1ee71a..d45b2e1fd9f2 100644
  	tristate "Qualcomm ETHQOS support"
  	default ARCH_QCOM
 diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
-index 26cad4344701..af9ad8ec9626 100644
+index c2f0e91f6bf8..9ad873b60920 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
 +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
 @@ -19,6 +19,7 @@ obj-$(CONFIG_DWMAC_IPQ806X)	+= dwmac-ipq806x.o
@@ -49,7 +49,7 @@ index 26cad4344701..af9ad8ec9626 100644
 +obj-$(CONFIG_DWMAC_PHYTIUM)	+= dwmac-phytium.o
  obj-$(CONFIG_DWMAC_QCOM_ETHQOS)	+= dwmac-qcom-ethqos.o
  obj-$(CONFIG_DWMAC_ROCKCHIP)	+= dwmac-rk.o
- obj-$(CONFIG_DWMAC_SOCFPGA)	+= dwmac-altr-socfpga.o
+ obj-$(CONFIG_DWMAC_RZN1)	+= dwmac-rzn1.o
 diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-phytium.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-phytium.c
 new file mode 100644
 index 000000000000..cda672e23b2c
@@ -279,5 +279,5 @@ index 000000000000..cda672e23b2c
 +MODULE_DESCRIPTION("Glue driver for Phytium DWMAC");
 +MODULE_LICENSE("GPL v2");
 -- 
-2.45.1
+2.43.4
 

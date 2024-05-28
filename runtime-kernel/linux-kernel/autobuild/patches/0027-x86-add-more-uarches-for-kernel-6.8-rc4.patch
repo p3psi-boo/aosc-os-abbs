@@ -1,7 +1,7 @@
-From 0422907b763cf7c76169d171597bb96fb2daa8f4 Mon Sep 17 00:00:00 2001
+From ae83c9e1e11045d08eb755c1ab430d0ea6ae93b3 Mon Sep 17 00:00:00 2001
 From: graysky <therealgraysky@proton.me>
 Date: Wed, 21 Feb 2024 08:38:13 -0500
-Subject: [PATCH 27/58] x86: add more uarches for kernel 6.8-rc4+
+Subject: [PATCH 27/91] x86: add more uarches for kernel 6.8-rc4+
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -640,10 +640,10 @@ index 2a7279d80460..6924a0f5f1c2 100644
  	default "4"
  
 diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 5ab93fcdd691..d7909940b112 100644
+index 801fd85c3ef6..7abf45340cae 100644
 --- a/arch/x86/Makefile
 +++ b/arch/x86/Makefile
-@@ -156,8 +156,48 @@ else
+@@ -176,8 +176,48 @@ else
          # FIXME - should be integrated in Makefile.cpu (Makefile_32.cpu)
          cflags-$(CONFIG_MK8)		+= -march=k8
          cflags-$(CONFIG_MPSC)		+= -march=nocona
@@ -787,5 +787,5 @@ index 75884d2cdec3..02c1386eb653 100644
  #define MODULE_PROC_FAMILY "ELAN "
  #elif defined CONFIG_MCRUSOE
 -- 
-2.45.1
+2.43.4
 

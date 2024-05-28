@@ -1,8 +1,11 @@
-VER=6.9.3
-#RC=
+VER=6.10.0
+RC=4
 # Use this for RC releases.
-#SRCS="tbl::https://git.kernel.org/torvalds/t/linux-${VER%%.0}-rc${RC}.tar.gz"
+#
+# To RFC: Increment by 0.1 per RC release, i.e., RC3 = 0.3.
+REL=0.4
+SRCS="tbl::https://git.kernel.org/torvalds/t/linux-${VER%%.0}-rc${RC}.tar.gz"
 # Use this for stable releases.
-SRCS="tbl::https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${VER%%.0}.tar.xz"
-CHKSUMS="sha256::c321c46401368774fc236f57095b205a5da57415f9a6008018902f9fd5eddfae"
+#SRCS="tbl::https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${VER%%.0}.tar.xz"
+CHKSUMS="sha256::3d4c52f71c47157e6c87d5e7cbff8d67c00548d21890322f5274beebe7bd3f7c"
 CHKUPDATE="anitya::id=6501"

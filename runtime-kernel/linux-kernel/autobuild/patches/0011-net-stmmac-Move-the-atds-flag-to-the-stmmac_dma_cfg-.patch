@@ -1,15 +1,27 @@
-From 2a7ae5e4a485285017d76f715503c07fc0df061a Mon Sep 17 00:00:00 2001
+From 7f0481a20e1ba32ca985a2871856ed49d09b9543 Mon Sep 17 00:00:00 2001
 From: Yanteng Si <siyanteng@loongson.cn>
-Date: Thu, 25 Apr 2024 21:01:54 +0800
-Subject: [PATCH 11/58] net: stmmac: Move the atds flag to the stmmac_dma_cfg
+Date: Wed, 29 May 2024 18:18:17 +0800
+Subject: [PATCH 11/91] net: stmmac: Move the atds flag to the stmmac_dma_cfg
  structure
 
-Alternate Descriptor Size (ATDS) is a part of the DMA-configs together
-with the PBL, ALL, AEME, etc so the structure is the most suitable
-place for it.
+ATDS (Alternate Descriptor Size) is a part of the DMA Bus Mode configs
+(together with PBL, ALL, EME, etc) of the DW GMAC controllers. Seeing
+it's not changed at runtime but is activated as long as the IP-core
+has it supported (at least due to the Type 2 Full Checksum Offload
+Engine feature), move the respective parameter from the
+stmmac_dma_ops::init() callback argument to the stmmac_dma_cfg
+structure, which already have the rest of the DMA-related configs
+defined.
+
+Besides the being added in the next commit DW GMAC multi-channels
+support will require to add the stmmac_dma_ops::init_chan() callback
+and have the ATDS flag set/cleared for each channel in there. Having
+the atds-flag in the stmmac_dma_cfg structure will make the parameter
+accessible from stmmac_dma_ops::init_chan() callback too.
 
 Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
 Signed-off-by: Yinggang Gu <guyinggang@loongson.cn>
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
 Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
 ---
  drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c   | 2 +-
@@ -97,7 +109,7 @@ index dd2ab6185c40..7840bc403788 100644
  	u32 value = readl(ioaddr + XGMAC_DMA_SYSBUS_MODE);
  
 diff --git a/drivers/net/ethernet/stmicro/stmmac/hwif.h b/drivers/net/ethernet/stmicro/stmmac/hwif.h
-index 7be04b54738b..ec9a8d37673c 100644
+index 90384db228b5..413441eb6ea0 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/hwif.h
 +++ b/drivers/net/ethernet/stmicro/stmmac/hwif.h
 @@ -175,8 +175,7 @@ struct dma_features;
@@ -111,10 +123,10 @@ index 7be04b54738b..ec9a8d37673c 100644
  			  struct stmmac_dma_cfg *dma_cfg, u32 chan);
  	void (*init_rx_chan)(struct stmmac_priv *priv, void __iomem *ioaddr,
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 7c6fb14b5555..3e48d1a41c38 100644
+index b3afc7cb7d72..99da314508c3 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -2999,7 +2999,6 @@ static int stmmac_init_dma_engine(struct stmmac_priv *priv)
+@@ -3006,7 +3006,6 @@ static int stmmac_init_dma_engine(struct stmmac_priv *priv)
  	struct stmmac_rx_queue *rx_q;
  	struct stmmac_tx_queue *tx_q;
  	u32 chan = 0;
@@ -122,7 +134,7 @@ index 7c6fb14b5555..3e48d1a41c38 100644
  	int ret = 0;
  
  	if (!priv->plat->dma_cfg || !priv->plat->dma_cfg->pbl) {
-@@ -3008,7 +3007,7 @@ static int stmmac_init_dma_engine(struct stmmac_priv *priv)
+@@ -3015,7 +3014,7 @@ static int stmmac_init_dma_engine(struct stmmac_priv *priv)
  	}
  
  	if (priv->extend_desc && (priv->mode == STMMAC_RING_MODE))
@@ -131,7 +143,7 @@ index 7c6fb14b5555..3e48d1a41c38 100644
  
  	ret = stmmac_reset(priv, priv->ioaddr);
  	if (ret) {
-@@ -3017,7 +3016,7 @@ static int stmmac_init_dma_engine(struct stmmac_priv *priv)
+@@ -3024,7 +3023,7 @@ static int stmmac_init_dma_engine(struct stmmac_priv *priv)
  	}
  
  	/* DMA Configuration */
@@ -141,7 +153,7 @@ index 7c6fb14b5555..3e48d1a41c38 100644
  	if (priv->plat->axi)
  		stmmac_axi(priv, priv->ioaddr, priv->plat->axi);
 diff --git a/include/linux/stmmac.h b/include/linux/stmmac.h
-index c0d74f97fd18..96c4d079dd8e 100644
+index f92c195c76ed..1536455f9052 100644
 --- a/include/linux/stmmac.h
 +++ b/include/linux/stmmac.h
 @@ -100,6 +100,7 @@ struct stmmac_dma_cfg {
@@ -153,5 +165,5 @@ index c0d74f97fd18..96c4d079dd8e 100644
  
  #define AXI_BLEN	7
 -- 
-2.45.1
+2.43.4
 

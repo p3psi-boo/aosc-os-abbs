@@ -1,0 +1,31 @@
+From 15735b630c3e7596465b9efd1314c7fb81bf2339 Mon Sep 17 00:00:00 2001
+From: Yanteng Si <siyanteng@loongson.cn>
+Date: Wed, 29 May 2024 18:19:47 +0800
+Subject: [PATCH 18/91] net: stmmac: dwmac-loongson: Add phy_interface for
+ Loongson GMAC
+
+The phy_interface of gmac is PHY_INTERFACE_MODE_RGMII_ID.
+
+Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+Signed-off-by: Yinggang Gu <guyinggang@loongson.cn>
+Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
+---
+ drivers/net/ethernet/stmicro/stmmac/dwmac-loongson.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson.c
+index e725c59c6c98..0289956e274b 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson.c
+@@ -49,6 +49,8 @@ static int loongson_gmac_data(struct plat_stmmacenet_data *plat)
+ {
+ 	loongson_default_data(plat);
+ 
++	plat->phy_interface = PHY_INTERFACE_MODE_RGMII_ID;
++
+ 	return 0;
+ }
+ 
+-- 
+2.43.4
+

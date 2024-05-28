@@ -1,12 +1,17 @@
-From 3b7856166b330819cfd4abd94d385dd68d497178 Mon Sep 17 00:00:00 2001
+From 945957c798d2f3d5e66eac46c0a8a7da56c4d7dc Mon Sep 17 00:00:00 2001
 From: Yanteng Si <siyanteng@loongson.cn>
-Date: Thu, 25 Apr 2024 21:01:56 +0800
-Subject: [PATCH 13/58] net: stmmac: Export dwmac1000_dma_ops
+Date: Wed, 29 May 2024 18:18:19 +0800
+Subject: [PATCH 13/91] net: stmmac: Export dwmac1000_dma_ops
 
-The loongson gnet will call it in the future.
+Export the DW GMAC DMA-ops descriptor so one could be available in
+the low-level platform drivers. It will be utilized to override some
+callbacks in order to handle the LS2K2000 GNET device specifics. The
+GNET controller support is being added in one of the following up
+commits.
 
 Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
 Signed-off-by: Yinggang Gu <guyinggang@loongson.cn>
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
 Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
 ---
  drivers/net/ethernet/stmicro/stmmac/dwmac1000_dma.c | 1 +
@@ -22,5 +27,5 @@ index f161ec9ac490..66c0c22908b1 100644
  };
 +EXPORT_SYMBOL_GPL(dwmac1000_dma_ops);
 -- 
-2.45.1
+2.43.4
 

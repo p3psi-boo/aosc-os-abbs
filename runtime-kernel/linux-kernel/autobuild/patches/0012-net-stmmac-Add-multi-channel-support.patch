@@ -1,7 +1,7 @@
-From 744dc5a038d8a314225e5824287e115ccdb30e3a Mon Sep 17 00:00:00 2001
+From 8f203a42dfff7f9cee8482f702a6e61076c4ef9d Mon Sep 17 00:00:00 2001
 From: Yanteng Si <siyanteng@loongson.cn>
-Date: Thu, 25 Apr 2024 21:01:55 +0800
-Subject: [PATCH 12/58] net: stmmac: Add multi-channel support
+Date: Wed, 29 May 2024 18:18:18 +0800
+Subject: [PATCH 12/91] net: stmmac: Add multi-channel support
 
 DW GMAC v3.x multi-channels feature is implemented as multiple
 sets of the same CSRs. Here is only preliminary support, it will
@@ -17,8 +17,8 @@ Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
  .../net/ethernet/stmicro/stmmac/dwmac_dma.h   | 20 ++++++++++--
  .../net/ethernet/stmicro/stmmac/dwmac_lib.c   | 30 ++++++++---------
  drivers/net/ethernet/stmicro/stmmac/hwif.h    |  2 +-
- .../net/ethernet/stmicro/stmmac/stmmac_main.c |  6 ++--
- 6 files changed, 55 insertions(+), 37 deletions(-)
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 14 ++++----
+ 6 files changed, 60 insertions(+), 40 deletions(-)
 
 diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
 index d87079016952..cc93f73a380e 100644
@@ -278,7 +278,7 @@ index 85e18f9a22f9..4846bf49c576 100644
  #ifdef DWMAC_DMA_DEBUG
  	/* Enable it to monitor DMA rx/tx status in case of critical problems */
 diff --git a/drivers/net/ethernet/stmicro/stmmac/hwif.h b/drivers/net/ethernet/stmicro/stmmac/hwif.h
-index ec9a8d37673c..3b20fb7f3a61 100644
+index 413441eb6ea0..d807ee4b066e 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/hwif.h
 +++ b/drivers/net/ethernet/stmicro/stmmac/hwif.h
 @@ -197,7 +197,7 @@ struct stmmac_dma_ops {
@@ -291,10 +291,25 @@ index ec9a8d37673c..3b20fb7f3a61 100644
  			       u32 chan, bool rx, bool tx);
  	void (*disable_dma_irq)(struct stmmac_priv *priv, void __iomem *ioaddr,
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 3e48d1a41c38..c4c81242adec 100644
+index 99da314508c3..0eef95c15cd0 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -2549,7 +2549,7 @@ static bool stmmac_xdp_xmit_zc(struct stmmac_priv *priv, u32 queue, u32 budget)
+@@ -2370,9 +2370,11 @@ static void stmmac_dma_operation_mode(struct stmmac_priv *priv)
+ 	if (txfifosz == 0)
+ 		txfifosz = priv->dma_cap.tx_fifo_size;
+ 
+-	/* Adjust for real per queue fifo size */
+-	rxfifosz /= rx_channels_count;
+-	txfifosz /= tx_channels_count;
++	/* Split up the shared Tx/Rx FIFO memory on DW QoS Eth and DW XGMAC */
++	if (priv->plat->has_gmac4 || priv->plat->has_xgmac) {
++		rxfifosz /= rx_channels_count;
++		txfifosz /= tx_channels_count;
++	}
+ 
+ 	if (priv->plat->force_thresh_dma_mode) {
+ 		txmode = tc;
+@@ -2556,7 +2558,7 @@ static bool stmmac_xdp_xmit_zc(struct stmmac_priv *priv, u32 queue, u32 budget)
  				       true, priv->mode, true, true,
  				       xdp_desc.len);
  
@@ -303,7 +318,7 @@ index 3e48d1a41c38..c4c81242adec 100644
  
  		xsk_tx_metadata_to_compl(meta,
  					 &tx_q->tx_skbuff_dma[entry].xsk_meta);
-@@ -4742,7 +4742,7 @@ static netdev_tx_t stmmac_xmit(struct sk_buff *skb, struct net_device *dev)
+@@ -4752,7 +4754,7 @@ static netdev_tx_t stmmac_xmit(struct sk_buff *skb, struct net_device *dev)
  
  	netdev_tx_sent_queue(netdev_get_tx_queue(dev, queue), skb->len);
  
@@ -312,7 +327,7 @@ index 3e48d1a41c38..c4c81242adec 100644
  
  	stmmac_flush_tx_descriptors(priv, queue);
  	stmmac_tx_timer_arm(priv, queue);
-@@ -4969,7 +4969,7 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv *priv, int queue,
+@@ -4979,7 +4981,7 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv *priv, int queue,
  		u64_stats_update_end(&txq_stats->q_syncp);
  	}
  
@@ -322,5 +337,5 @@ index 3e48d1a41c38..c4c81242adec 100644
  	entry = STMMAC_GET_ENTRY(entry, priv->dma_conf.dma_tx_size);
  	tx_q->cur_tx = entry;
 -- 
-2.45.1
+2.43.4
 
