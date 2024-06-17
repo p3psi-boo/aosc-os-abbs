@@ -1,0 +1,47 @@
+# Building this package requires a minimal set of package to be installed:
+# Version of glibc
+# glibc for target architecture is required to build and for further usage.
+GLIBC_VER=2.38-2
+# Version of linux+api
+LINUXAPI_VER=6.7.12-0
+# Version of aosc-aaa
+AOSCAAA_VER=11.4.2-0
+# Version of libxcrypt
+LIBXCRYPT_VER=4.4.36-2
+# Version of gcc
+GCC_VER=13.2.0
+# Target architecture - this variable is used during build process
+
+VER=${GCC_VER}+glibc${GLIBC_VER/-/+}
+SRCS="tbl::https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VER}/gcc-${GCC_VER}.tar.xz \
+      file::rename=glibc_amd64.deb::https://repo.aosc.io/debs/pool/stable/main/g/glibc__amd64.deb \
+      file::rename=linux+api_amd64.deb::https://repo.aosc.io/debs/pool/stable/main/l/linux+api__amd64.deb \
+      file::rename=aosc-aaa_amd64.deb::https://repo.aosc.io/debs/pool/stable/main/a/aosc-aaa__amd64.deb \
+      file::rename=libxcrypt_amd64.deb::https://repo.aosc.io/debs/pool/stable/main/libx/libxcrypt__amd64.deb \
+      file::rename=glibc_arm64.deb::https://repo.aosc.io/debs/pool/stable/main/g/glibc__arm64.deb \
+      file::rename=linux+api_arm64.deb::https://repo.aosc.io/debs/pool/stable/main/l/linux+api__arm64.deb \
+      file::rename=aosc-aaa_arm64.deb::https://repo.aosc.io/debs/pool/stable/main/a/aosc-aaa__arm64.deb \
+      file::rename=libxcrypt_arm64.deb::https://repo.aosc.io/debs/pool/stable/main/libx/libxcrypt__arm64.deb \
+      file::rename=glibc_loongarch64.deb::https://repo.aosc.io/debs/pool/stable/main/g/glibc__loongarch64.deb \
+      file::rename=linux+api_loongarch64.deb::https://repo.aosc.io/debs/pool/stable/main/l/linux+api__loongarch64.deb \
+      file::rename=aosc-aaa_loongarch64.deb::https://repo.aosc.io/debs/pool/stable/main/a/aosc-aaa__loongarch64.deb \
+      file::rename=libxcrypt_loongarch64.deb::https://repo.aosc.io/debs/pool/stable/main/libx/libxcrypt__loongarch64.deb \
+      file::rename=glibc_loongson3.deb::https://repo.aosc.io/debs/pool/stable/main/g/glibc__loongson3.deb \
+      file::rename=linux+api_loongson3.deb::https://repo.aosc.io/debs/pool/stable/main/l/linux+api__loongson3.deb \
+      file::rename=aosc-aaa_loongson3.deb::https://repo.aosc.io/debs/pool/stable/main/a/aosc-aaa__loongson3.deb \
+      file::rename=libxcrypt_loongson3.deb::https://repo.aosc.io/debs/pool/stable/main/libx/libxcrypt__loongson3.deb \
+      file::rename=glibc_mips64r6el.deb::https://repo.aosc.io/debs/pool/stable/main/g/glibc__mips64r6el.deb \
+      file::rename=linux+api_mips64r6el.deb::https://repo.aosc.io/debs/pool/stable/main/l/linux+api__mips64r6el.deb \
+      file::rename=aosc-aaa_mips64r6el.deb::https://repo.aosc.io/debs/pool/stable/main/a/aosc-aaa__mips64r6el.deb \
+      file::rename=libxcrypt_mips64r6el.deb::https://repo.aosc.io/debs/pool/stable/main/libx/libxcrypt__mips64r6el.deb \
+      file::rename=glibc_ppc64el.deb::https://repo.aosc.io/debs/pool/stable/main/g/glibc__ppc64el.deb \
+      file::rename=linux+api_ppc64el.deb::https://repo.aosc.io/debs/pool/stable/main/l/linux+api__ppc64el.deb \
+      file::rename=aosc-aaa_ppc64el.deb::https://repo.aosc.io/debs/pool/stable/main/a/aosc-aaa__ppc64el.deb \
+      file::rename=libxcrypt_ppc64el.deb::https://repo.aosc.io/debs/pool/stable/main/libx/libxcrypt__ppc64el.deb \
+      file::rename=glibc_riscv64.deb::https://repo.aosc.io/debs/pool/stable/main/g/glibc__riscv64.deb \
+      file::rename=linux+api_riscv64.deb::https://repo.aosc.io/debs/pool/stable/main/l/linux+api__riscv64.deb \
+      file::rename=aosc-aaa_riscv64.deb::https://repo.aosc.io/debs/pool/stable/main/a/aosc-aaa__riscv64.deb \
+      file::rename=libxcrypt_riscv64.deb::https://repo.aosc.io/debs/pool/stable/main/libx/libxcrypt__riscv64.deb"
+CHKSUMS=""
+CHKUPDATE="anitya::id=6502"
+SUBDIR="gcc-${GCC_VER}"
