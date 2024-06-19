@@ -1,0 +1,10 @@
+PKGNAME=yesplaymusic
+PKGDES="A third party music player for Netease Cloud Music"
+PKGSEC="sound"
+PKGDEP="alsa-lib desktop-file-utils flac harfbuzz hicolor-icon-theme icu libpng \
+        nss opus snappy speech-dispatcher perl-file-basedir at-spi2-core \
+        cups gtk-3 ca-certs cairo x11-lib libxcb curl libdrm mesa expat \
+        wget xdg-utils osdlyrics"
+BUILDDEP="nvm"
+PKGPROV="YesPlayMusic"
+FAIL_ARCH="!(amd64|arm64)"
